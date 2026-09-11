@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>법인 설립 To-Do</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#fff; --wash:#f5f5f7; --ink:#1d1d1f; --ink2:#6e6e73; --ink3:#8e8e93;
+  --line:#d2d2d7; --line2:#e8e8ed; --navy:#1f2a44; --blue:#0071e3; --red:#c7362c; --green:#1d7a4c;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
+  font-size:17px;line-height:1.62;letter-spacing:-0.011em;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+header{padding:66px 0 6px}
+h1{font-size:44px;line-height:1.12;font-weight:700;letter-spacing:-0.03em;margin:0 0 14px}
+ul.lede{font-size:18.5px;color:var(--ink2);margin:0;padding:0;list-style:none}
+ul.lede li{position:relative;padding-left:17px;margin-bottom:5px;line-height:1.55}
+ul.lede li::before{content:"";position:absolute;left:0;top:.72em;width:6px;height:1.5px;background:var(--ink3)}
+
+h2{font-size:28px;font-weight:650;letter-spacing:-0.024em;margin:0 0 10px}
+h3{font-size:20px;font-weight:600;letter-spacing:-0.018em;margin:40px 0 10px}
+p{margin:0 0 15px}
+.sub{color:var(--ink2);font-size:17px;margin:0 0 24px}
+.small{font-size:13.5px;color:var(--ink3);line-height:1.58;margin:8px 0 0}
+section{padding:42px 0 0}
+hr{border:0;border-top:1px solid var(--line2);margin:50px 0 0}
+
+/* progress */
+.track{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line2);padding:14px 0}
+.trow{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.tnum{font-size:15px;font-weight:650;letter-spacing:-0.014em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tnum span{color:var(--ink3);font-weight:500}
+.tbar{flex:1;min-width:140px;height:6px;background:#e3e3e8;border-radius:3px;overflow:hidden}
+.tfill{height:100%;background:var(--ink);border-radius:3px;transition:width .3s cubic-bezier(.4,0,.2,1)}
+.btn{font:inherit;font-size:13.5px;font-weight:500;padding:8px 15px;border-radius:9px;cursor:pointer;background:var(--ink);color:#fff;border:0;white-space:nowrap}
+.btn:hover{opacity:.85}
+.btn.ghost{background:#fff;color:var(--ink2);border:1px solid var(--line)}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.note{font-size:12.5px;color:var(--ink3)}
+
+/* phase */
+.phase{margin:0 0 38px}
+.ph{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.pn{font-size:19px;font-weight:650;letter-spacing:-0.018em}
+.pw{font-size:13px;color:var(--ink3);background:var(--wash);padding:3px 10px;border-radius:100px}
+.pc{margin-left:auto;font-size:13px;color:var(--ink3);font-variant-numeric:tabular-nums}
+.tasks{list-style:none;margin:0;padding:0}
+.task{display:flex;gap:14px;padding:15px 0;border-bottom:1px solid var(--line2);align-items:flex-start}
+.task:last-child{border-bottom:0}
+.cb{flex:0 0 auto;margin-top:2px;cursor:pointer}
+.cb input{position:absolute;opacity:0;width:0;height:0}
+.cb .box{
+  display:block;width:21px;height:21px;border:1.5px solid var(--line);border-radius:6px;background:#fff;
+  transition:background .14s,border-color .14s;position:relative;
+}
+.cb .box::after{
+  content:"";position:absolute;left:6.5px;top:2.5px;width:5px;height:10px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) scale(0);
+  transition:transform .14s cubic-bezier(.4,0,.2,1);
+}
+.cb input:checked + .box{background:var(--ink);border-color:var(--ink)}
+.cb input:checked + .box::after{transform:rotate(45deg) scale(1)}
+.cb input:focus-visible + .box{outline:2px solid var(--blue);outline-offset:2px}
+.tc{flex:1;min-width:0}
+.tt{font-size:16px;font-weight:600;letter-spacing:-0.012em;margin:0 0 3px;line-height:1.45}
+.td{font-size:14.5px;color:var(--ink2);margin:0 0 6px;line-height:1.55}
+.tm{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--ink3)}
+.tm b{font-weight:500;color:var(--ink2)}
+.task.done .tt{color:var(--ink3);text-decoration:line-through;text-decoration-color:var(--line)}
+.task.done .td,.task.done .tm{color:#b8b8be}
+.task .memo{
+  font:inherit;font-size:13.5px;line-height:1.5;width:100%;margin-top:8px;
+  border:1px solid var(--line2);border-radius:8px;padding:7px 9px;background:#fff;color:var(--ink);
+  min-height:34px;resize:vertical;overflow:hidden;
+}
+.task .memo:focus{outline:2px solid var(--blue);outline-offset:-1px;border-color:transparent}
+.task .memo::placeholder{color:#c7c7cc}
+.req{display:inline-block;font-size:11.5px;font-weight:600;color:var(--red);background:#fdeeec;padding:1px 7px;border-radius:100px;margin-left:6px;vertical-align:1.5px}
+
+/* tables */
+.tw{overflow-x:auto;margin:18px 0 6px;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:600px}
+th,td{text-align:left;padding:12px 13px;border-bottom:1px solid var(--line2);vertical-align:top}
+thead th{background:var(--wash);font-weight:600;font-size:13px;border-bottom:1px solid var(--line);white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.total td{font-weight:650;background:#fafafc;border-bottom:1px solid var(--line)}
+.dim{color:var(--ink3)}
+
+.callout{border-left:3px solid var(--ink);padding:2px 0 2px 18px;margin:24px 0}
+.callout p{margin:0 0 9px}
+.callout p:last-child{margin:0}
+.callout.key{border-left-color:var(--blue)}
+.callout.warn{border-left-color:var(--red)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+.card{background:var(--wash);border-radius:16px;padding:20px 22px}
+.card h4{margin:0 0 9px;font-size:16px;font-weight:650}
+.card ul{margin:0;padding-left:17px}
+.card li{font-size:14.5px;line-height:1.58;margin-bottom:6px}
+.card li:last-child{margin-bottom:0}
+.card p{font-size:14.5px;line-height:1.6;margin:0 0 8px}
+.card p:last-child{margin:0}
+
+.flow{list-style:none;margin:18px 0;padding:0;counter-reset:fc}
+.flow li{counter-increment:fc;position:relative;padding:0 0 20px 42px;border-left:1px solid var(--line2);margin-left:12px}
+.flow li:last-child{border-left-color:transparent;padding-bottom:0}
+.flow li::before{
+  content:counter(fc);position:absolute;left:-12px;top:-2px;width:25px;height:25px;border-radius:50%;
+  background:var(--ink);color:#fff;font-size:12.5px;font-weight:600;display:flex;align-items:center;justify-content:center;
+}
+.flow .ft{font-weight:600;margin:0 0 2px;letter-spacing:-0.012em}
+.flow .fd{font-size:14.5px;color:var(--ink2);margin:0;line-height:1.55}
+
+@media (max-width:760px){
+  header{padding:40px 0 4px}
+  h1{font-size:31px}
+  ul.lede{font-size:16.5px}
+  h2{font-size:24px}
+  h3{font-size:18.5px;margin:32px 0 9px}
+  body{font-size:16px}
+  .wrap{padding:0 18px;padding-left:max(18px,env(safe-area-inset-left));padding-right:max(18px,env(safe-area-inset-right))}
+  section{padding:32px 0 0}
+  .grid2{grid-template-columns:1fr}
+  .trow{gap:10px}
+  .tbar{order:3;flex:1 0 100%;min-width:0}
+  .flow li{padding-left:32px}
+  .tw{overflow-x:visible}
+  table{min-width:0;display:block;font-size:15px}
+  thead{display:none}
+  tbody{display:block}
+  tbody tr{display:block;border:1px solid var(--line2);border-radius:12px;padding:14px 15px;margin-bottom:10px}
+  tbody tr.total{background:var(--wash);border-color:var(--line)}
+  td{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:6px 0;border-bottom:0;text-align:right}
+  td::before{content:attr(data-l);color:var(--ink3);font-size:13px;text-align:left;flex:0 0 auto}
+  td:first-child{display:block;text-align:left;font-weight:650;font-size:16px;padding:0 0 9px;margin-bottom:5px;border-bottom:1px solid var(--line2)}
+  td:first-child::before{display:none}
+  td:empty{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>법인 설립 To-Do</h1>
+    <ul class="lede">
+      <li>주식회사 설립등기부터 사업자등록, 법인통장 개설, 운영 세팅까지 순서대로 정리한 실행 목록</li>
+      <li>체크와 메모는 자동 저장되며, 하단 버튼으로 전체 내용을 복사 가능</li>
+    </ul>
+  </div>
+</header>
+
+<div class="track">
+  <div class="wrap">
+    <div class="trow">
+      <span class="tnum" id="cnt">0 <span>/ 0 완료</span></span>
+      <div class="tbar"><div class="tfill" id="fill" style="width:0%"></div></div>
+      <button type="button" class="btn ghost" id="btnCopy">복사</button>
+      <button type="button" class="btn ghost" id="btnReset">초기화</button>
+      <span class="note" id="saveNote"></span>
+    </div>
+  </div>
+</div>
+
+<section>
+<div class="wrap">
+  <h2>자본금과 초기 비용은 계좌를 나눠서</h2>
+  <p class="sub">설립 과정에서 등록면허세와 법무사비 등 현금이 먼저 나갑니다. 그런데 자본금은 잔고증명을 받은 뒤 등기가 끝날 때까지 손대면 안 되므로, 처음부터 계좌를 두 개로 나눠 넣는 것이 가장 안전합니다.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h4>계좌 A · 자본금 전용</h4>
+      <p>대표이사 명의로 새로 만드는 계좌. 주주들이 지분대로 각자 이름으로 이체합니다.</p>
+      <ul>
+        <li>자본금 금액만 정확히 입금</li>
+        <li>잔고증명 발급 후 등기 완료까지 <strong>인출 금지</strong></li>
+        <li>법인통장 개설 당일 전액 이체</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>계좌 B · 초기 비용용</h4>
+      <p>설립 과정에서 나가는 돈을 여기서 씁니다. 대표 기존 계좌를 써도 되고 별도로 만들어도 됩니다.</p>
+      <ul>
+        <li>등록면허세, 법무사비, 도장, 사무실 계약금 등</li>
+        <li>영수증과 세금계산서를 전부 보관</li>
+        <li>법인통장 개설 후 법인 자금으로 정산 상환</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <p><strong>자본금을 등기 비용으로 쓰면 안 됩니다.</strong> 잔고증명 발급일 잔액이 자본금 이상이어야 하고, 발급 후 등기 완료 전에 잔액이 내려가면 납입가장으로 볼 소지가 있습니다. 등기 후에도 대표 개인계좌에 오래 두면 세무상 가지급금으로 잡힙니다.</p>
+  </div>
+
+  <h3>돈의 이동 순서</h3>
+  <ol class="flow">
+    <li><p class="ft">주주 → 계좌 A</p><p class="fd">자본금을 지분비례로 이체. 반드시 각자 본인 명의로, 현금 입금은 금지. 이체 내역 캡처 보관</p></li>
+    <li><p class="ft">주주 → 계좌 B</p><p class="fd">초기 비용 몫을 같은 비율로 이체. 100만원 안팎이면 충분</p></li>
+    <li><p class="ft">계좌 A에서 잔고증명 발급</p><p class="fd">발급일 기준 잔액이 자본금 이상. 이 시점부터 계좌 A 동결</p></li>
+    <li><p class="ft">계좌 B에서 설립 비용 지출</p><p class="fd">등록면허세, 등기수수료, 법무사비, 도장 제작비</p></li>
+    <li><p class="ft">등기 완료 → 사업자등록 → 법인통장 개설</p><p class="fd">이 순서는 바꿀 수 없습니다. 법인통장은 등기부등본과 사업자등록증이 있어야 열립니다</p></li>
+    <li><p class="ft">계좌 A → 법인통장 전액 이체</p><p class="fd">개설 당일. 적요는 자본금 납입</p></li>
+    <li><p class="ft">법인통장 → 계좌 B 정산</p><p class="fd">영수증을 세무사에게 넘기고 창업비로 처리. 선납한 사람에게 상환</p></li>
+  </ol>
+</div>
+</section>
+
+<hr>
+
+<section>
+<div class="wrap">
+  <h2>실행 목록</h2>
+  <p class="sub">D는 설립등기 신청일. 서류가 준비되어 있으면 등기부터 법인통장까지 약 2주, 사전 준비를 포함하면 3주에서 5주.</p>
+  <div id="list"></div>
+</div>
+</section>
+
+<hr>
+
+<section>
+<div class="wrap">
+  <h2>비용 정리</h2>
+  <p class="sub">자본금 1,500만원, 본점 서울(과밀억제권역), 법무사 대행 기준. 단위는 원.</p>
+  <div class="tw">
+  <table>
+    <thead><tr><th style="width:30%">항목</th><th class="n" style="width:16%">금액</th><th style="width:20%">지급 시점</th><th>비고</th></tr></thead>
+    <tbody>
+      <tr><td>등록면허세</td><td class="n" data-l="금액">337,500</td><td data-l="지급 시점">등기 신청 전</td><td data-l="비고">최저세액 112,500원의 3배. 자본금 2,812만원까지 동일</td></tr>
+      <tr><td>지방교육세</td><td class="n" data-l="금액">67,500</td><td data-l="지급 시점">등기 신청 전</td><td data-l="비고">등록면허세의 20%</td></tr>
+      <tr><td>등기신청수수료</td><td class="n" data-l="금액">20,000~28,000</td><td data-l="지급 시점">등기 신청 시</td><td data-l="비고">전자신청 20,000원, 전자표준양식 28,000원</td></tr>
+      <tr><td>법무사 대행료</td><td class="n" data-l="금액">330,000</td><td data-l="지급 시점">등기 신청 시</td><td data-l="비고">부가세 포함. 직접 진행하면 0원</td></tr>
+      <tr><td>법인인감도장</td><td class="n" data-l="금액">30,000</td><td data-l="지급 시점">등기 서류 작성 전</td><td data-l="비고">사용인감도 함께 만들면 편리</td></tr>
+      <tr><td>잔고증명 수수료</td><td class="n" data-l="금액">2,000</td><td data-l="지급 시점">자본금 납입 후</td><td data-l="비고">온라인 발급 가능</td></tr>
+      <tr><td>등기부등본·인감증명서</td><td class="n" data-l="금액">10,000</td><td data-l="지급 시점">등기 완료 후</td><td data-l="비고">5~8통. 사업자등록과 통장 개설용</td></tr>
+      <tr><td>법인 공동인증서</td><td class="n" data-l="금액">4,400</td><td data-l="지급 시점">통장 개설 시</td><td data-l="비고">은행용. 범용은 연 11만원</td></tr>
+      <tr><td>통신판매업 등록면허세</td><td class="n" data-l="금액">40,500</td><td data-l="지급 시점">사업자등록 후</td><td data-l="비고">온라인 판매 시 필수. 매년 1월 부과</td></tr>
+      <tr class="total"><td>합계</td><td class="n" data-l="금액">841,900</td><td data-l="지급 시점"></td><td data-l="비고">변호사 검토와 상표 출원은 별도</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small">이 금액이 계좌 B에서 나갑니다. 여유를 두고 100만원 정도를 준비해 두면 충분합니다. 비상주사무실을 쓴다면 월 이용료가 추가됩니다.</p>
+
+  <div class="callout key">
+    <p><strong>자본금 규모는 2,812만원까지 등기 비용이 같습니다.</strong> 등록면허세에 최저세액이 있어 그 이하 구간은 세금이 동일합니다. 나중에 증자하면 등록면허세와 법무사비가 다시 드니, 필요한 만큼은 처음에 넣는 것이 저렴합니다.</p>
+  </div>
+</div>
+</section>
+
+<hr>
+
+<section>
+<div class="wrap">
+  <h2>자주 놓치는 것</h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>기한이 정해진 것</h4>
+      <ul>
+        <li><strong>사업자등록</strong>은 설립등기일로부터 20일 이내</li>
+        <li><strong>4대보험</strong>은 건강보험 14일, 국민연금 다음 달 15일 이내</li>
+        <li><strong>임원 재선임 등기</strong>는 임기 만료 후 2주 이내. 누락하면 과태료</li>
+        <li><strong>변경등기</strong>는 사유 발생일로부터 2주 이내</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>순서를 바꿀 수 없는 것</h4>
+      <ul>
+        <li>인감도장 제작 → 등기 서류 작성 (인감신고서에 날인)</li>
+        <li>자본금 납입 → 잔고증명 → 등기 신청</li>
+        <li>등기 완료 → 사업자등록 → 법인통장 개설</li>
+        <li>인허가 취득 → 사업자등록 (인허가 업종인 경우)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>정관에 꼭 넣을 조항</h4>
+      <ul>
+        <li>임원의 보수는 주주총회 결의로 정한다</li>
+        <li>설립에 관한 비용은 회사가 부담한다</li>
+        <li>주식의 양도는 이사회(또는 주주총회) 승인을 받는다</li>
+        <li>사업목적은 향후 확장 업종까지 넉넉히</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>서류 유효기간</h4>
+      <ul>
+        <li>인감증명서는 발급 3개월 이내</li>
+        <li>주민등록등본도 최근 발급분</li>
+        <li>열람용 증명서는 효력 없음. 반드시 제출용으로 발급</li>
+        <li>잔고증명은 발급일 기준이므로 등기 일정과 맞춰서</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<div style="height:90px"></div>
+
+<script>
+(function(){
+  var DATA=[
+    {p:'Phase 0 · 사전 결정', w:'D-14 ~ D-10 · 3~5일', t:[
+      ['상호 확정','인터넷등기소에서 동일 관할 내 동일 상호 확인, 키프리스에서 상표 선점 여부 확인. 브랜드명과 법인명은 달라도 무방','주주 전원','1일','0'],
+      ['사업목적 확정','현재 사업과 향후 확장 업종을 함께 기재. 유사 법인 등기부등본을 참고하면 빠름','주주 전원','1일','0'],
+      ['자본금·액면가·발행주식수 확정','액면 500원이면 지분 조정이 정수로 떨어져 편리. 자본금 2,812만원까지 등기 세금 동일','주주 전원','1일','0'],
+      ['지분율과 주주 구성 확정','주주명부에 그대로 들어갑니다. 3인 모두 50% 이하로 두면 과점주주 문제 없음','주주 전원','1일','0'],
+      ['임원 구성 확정','자본금 10억 미만이면 이사 1인, 감사 생략 가능. 임기 3년','주주 전원','1일','0'],
+      ['법무사 선정 및 견적','보수표 기준 5천만원 이하 42만원. 온라인 법률사무소는 20만원대부터','대표','2~3일','0'],
+      ['세무사 상담 및 기장 계약 예약','자본금 규모, 본점 주소, 창업 감면, 무보수 구조를 설립 전에 확인','대표','상담 1시간','0'],
+    ]},
+    {p:'Phase 1 · 자금 준비', w:'D-10 ~ D-7 · 2~3일', t:[
+      ['대표이사 명의 자본금 전용 계좌 개설','제1금융권. 기존 생활비 계좌는 자동이체로 잔액이 흔들릴 수 있어 신규 개설 권장','대표','당일','0'],
+      ['주주 3인 → 계좌 A 자본금 이체','지분비례로 각자 본인 명의 이체. 현금 입금 금지. 입금자명이 주주명과 일치해야 함','주주 전원','당일','0'],
+      ['주주 3인 → 계좌 B 초기 비용 이체','설립 비용 100만원 안팎을 같은 비율로. 여기서 등기 비용을 지출','주주 전원','당일','0'],
+      ['이체 내역 캡처 보관','주식인수증 증빙으로 사용. 누가 얼마 냈는지 기록이 남아야 함','대표','당일','0'],
+    ]},
+    {p:'Phase 2 · 설립 요건 확정', w:'D-7 ~ D-3 · 3~5일', t:[
+      ['본점 주소 확보','자택이면 무상사용승낙서와 건물 등기부등본, 비상주사무실이면 임대차계약서. 서울은 등록면허세 3배 중과','대표','1~3일','0'],
+      ['정관 작성','임원 보수는 주주총회 결의로 정한다, 설립비용 회사 부담, 주식양도 제한 조항 포함. 자본금 10억 미만 발기설립은 공증 면제','법무사','1~2일','0'],
+      ['법인인감도장 제작','인감신고서에 날인해야 하므로 등기 서류 작성 전에 준비. 사용인감도 함께 제작 권장','대표','1~2일','30,000'],
+      ['발기인 3인 인감증명서·인감도장·주민등록등본 준비','발급 3개월 이내. 열람용이 아닌 제출용으로 발급','주주 전원','1일','0'],
+      ['대표이사 인감증명서·주민등록등본 준비','취임승낙서와 인감신고서에 본인 인감 날인 필요','대표','1일','0'],
+      ['(해당 시) 인허가 요건 확인','화장품책임판매업 등은 사업자등록 전에 취득해야 하고 2~4주 소요','담당 주주','업종별','0'],
+    ]},
+    {p:'Phase 3 · 등기 신청', w:'D ~ D+3 · 3~5 영업일', t:[
+      ['잔고증명서 발급','계좌 A에서 발급. 발급일 잔액이 자본금 이상이어야 하며 이후 등기 완료까지 인출 금지','대표','당일','2,000'],
+      ['등기 서류 세트 작성','정관, 발기인회의사록, 주식인수증, 이사 취임승낙서, 조사보고서, 주주명부, 인감신고서, 위임장','법무사','1~2일','0'],
+      ['등록면허세·지방교육세 납부','위택스에서 납부. 계좌 B에서 지출하고 영수증 보관','법무사 또는 대표','당일','405,000'],
+      ['설립등기 신청','인터넷등기소 전자신청 또는 법무사 대행. 보정 요청이 나오면 1~2일 추가','법무사','접수 당일, 처리 2~4일','350,000'],
+      ['등기 완료 확인','등기부등본을 발급해 기재 사항이 정확한지 확인. 상호, 목적, 자본금, 임원, 주소','대표','당일','0'],
+    ]},
+    {p:'Phase 4 · 등기 완료 서류', w:'D+3 ~ D+5 · 1~2일', t:[
+      ['법인인감카드 발급','등기소 방문. 최초 1회는 대표 본인 또는 법인인감 날인 위임장을 가진 대리인','대표 또는 대리','당일','0'],
+      ['법인인감증명서 발급','사업자등록과 통장 개설, 채널 입점에 여러 통 필요. 5통 정도 준비','대표','당일','10,000'],
+      ['등기부등본 발급','같은 용도로 5통 정도','대표','당일','0'],
+    ]},
+    {p:'Phase 5 · 사업자등록', w:'D+3 ~ D+7 · 1~3 영업일', t:[
+      ['사업자등록 신청','홈택스 또는 관할 세무서. 등기부등본, 정관, 주주명부, 법인인감증명서, 임대차계약서 또는 사용승낙서, 대표 신분증','대표','신청 당일, 발급 1~3일','0','설립등기일로부터 20일 이내'],
+      ['사업자등록증 수령 및 홈택스 가입','전자세금계산서 발행과 세금 신고의 기본','대표','당일','0'],
+      ['세무대리인 수임 등록','이후 신고는 세무사가 홈택스에서 대행','세무사','당일','0'],
+      ['통신판매업 신고','구청 또는 정부24. 구매안전서비스 이용확인증이 필요하므로 오픈마켓이나 PG 가입이 선행','대표','1~3일','40,500'],
+    ]},
+    {p:'Phase 6 · 금융', w:'D+5 ~ D+14 · 1~2주', t:[
+      ['법인통장 개설','대표 직접 방문 필수. 사업자등록증, 등기부등본, 법인인감증명서와 인감도장, 정관, 주주명부, 신분증, 임대차계약서 지참','대표','방문 당일','0'],
+      ['한도계좌 해제 준비','신설법인은 이체한도 제한 계좌로 열리는 경우가 많음. 거래 계약서나 견적서를 함께 제출하면 해제가 빠름','대표','1주~4주','0'],
+      ['계좌 A 자본금 전액 이체','법인통장 개설 당일 처리. 적요는 자본금 납입. 개인계좌에 남기면 가지급금','대표','당일','0'],
+      ['법인 공동인증서 발급','은행용이면 홈택스와 오픈마켓 대부분 커버','대표','당일','4,400'],
+      ['법인 체크카드 발급','신설법인은 신용카드 심사가 까다로우므로 체크카드로 시작','대표','1~2일','0'],
+      ['인터넷뱅킹 개설 및 조회 권한 부여','주주 전원에게 조회 권한을 주고 이체 승인 규칙을 설정','대표','당일','0'],
+      ['설립비용 정산','계좌 B 지출 영수증을 세무사에게 전달하고 법인통장에서 선납자에게 상환. 회계상 창업비 처리','대표·세무사','1일','0'],
+    ]},
+    {p:'Phase 7 · 4대보험', w:'D+7 ~ D+21', t:[
+      ['임원 보수 결정','주주총회 의사록으로 보수 지급 여부와 한도를 결의. 무보수로 갈 경우 그 취지를 명시하고 법인인감 날인','주주 전원','1일','0'],
+      ['(무보수인 경우) 무보수 확인서 제출','공단 서식에 정관과 주주총회 의사록을 첨부해 건강보험공단과 국민연금공단에 접수. 직원이 없으면 사업장 성립신고 없이 무보수 신청만 진행','대표·세무사','1~3일','0'],
+      ['(보수 지급 시) 사업장 성립신고 및 자격취득신고','건강보험 14일, 국민연금 다음 달 15일 이내. 등기임원은 고용·산재 대상 아님','세무사','1~3일','0'],
+      ['(직원 채용 시) 고용·산재 성립신고','근로계약서 작성. 10인 이상이면 취업규칙 신고','노무사 또는 세무사','채용 시','0'],
+    ]},
+    {p:'Phase 8 · 운영 세팅', w:'D+14 ~ D+30', t:[
+      ['세무대리인 기장 계약 체결','월 기장료와 결산 조정료를 미리 확인. 무매출이어도 신고 의무는 발생','대표','1일','0'],
+      ['현금영수증 가맹 및 카드·계좌 홈택스 등록','비용 증빙 자동 수집을 위해','세무사','당일','0'],
+      ['주주간계약서 체결','등기 완료 후 날인. 정관과 정합성 확인','주주 전원','1일','0'],
+      ['상표 출원','법인 명의로 변리사 대행. 선행조사 후 출원. 심사는 10~14개월','담당 주주','출원 1일','337,000'],
+      ['법인인감·통장·인증서 관리 규정 문서화','보관자, 사용 절차, 사용대장 기록 방식을 1페이지로','대표','1일','0'],
+      ['채널 입점용 서류 세트 정리','사업자등록증, 통신판매업신고증, 통장사본, 법인인감증명서, 등기부등본 스캔본을 공유 드라이브에','대표','1일','0'],
+      ['법인 서류철 정리','정관, 주주명부, 주식인수증, 의사록 원본을 한 곳에. 이후 은행·투자·정부지원 심사에서 계속 필요','대표','1일','0'],
+    ]},
+    {p:'Phase 9 · 설립 후 정기 관리', w:'참고', t:[
+      ['매월 마감 및 증빙 정리','통장 잔액과 매출, 지출 요약을 주주 전원에게 공유','대표','월 1회','0'],
+      ['부가세 신고','법인은 연 4회. 1월과 7월 확정, 4월과 10월 예정','세무사','분기','0'],
+      ['법인세 신고 및 정기주주총회','3월 말까지 법인세, 4월 말 지방소득세. 결산 후 3개월 내 주주총회와 의사록 작성','세무사·대표','연 1회','0'],
+      ['가지급금·가수금 점검','가지급금은 0이 정상. 대표 개인 용도 지출이 없는지 연 1회 확인','세무사','연 1회','0'],
+      ['임원 임기 만료 재선임 등기','임기 3년. 만료 후 2주 내 등기하지 않으면 과태료','법무사','3년마다','0'],
+    ]},
+  ];
+
+  var KEY='setup-todo-v1', state={done:{},memo:{}};
+  var note=document.getElementById('saveNote'), ft;
+  function flash(t){ if(!note)return; note.textContent=t; clearTimeout(ft); ft=setTimeout(function(){note.textContent='';},1800); }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); flash('저장됨'); }catch(e){ flash('자동 저장이 안 되는 브라우저입니다'); } }
+  function load(){ try{ var r=localStorage.getItem(KEY); if(r){ var o=JSON.parse(r)||{}; state.done=o.done||{}; state.memo=o.memo||{}; } }catch(e){} }
+
+  load();
+  var host=document.getElementById('list'), total=0;
+  DATA.forEach(function(ph,pi){
+    var sec=document.createElement('div'); sec.className='phase';
+    var head='<div class="ph"><span class="pn">'+ph.p+'</span><span class="pw">'+ph.w+'</span><span class="pc" id="pc'+pi+'"></span></div>';
+    var ul='<ul class="tasks">';
+    ph.t.forEach(function(t,ti){
+      var id='t'+pi+'_'+ti; total++;
+      var meta='<div class="tm"><span><b>담당</b> '+t[2]+'</span><span><b>소요</b> '+t[3]+'</span>'+(t[4]&&t[4]!=='0'?'<span><b>비용</b> '+t[4]+'원</span>':'')+'</div>';
+      var req=t[5]?'<span class="req">'+t[5]+'</span>':'';
+      ul+='<li class="task" data-id="'+id+'" data-p="'+pi+'">'
+        +'<label class="cb"><input type="checkbox" data-id="'+id+'"><span class="box"></span></label>'
+        +'<div class="tc"><p class="tt">'+t[0]+req+'</p><p class="td">'+t[1]+'</p>'+meta
+        +'<textarea class="memo" data-id="'+id+'" rows="1" placeholder="메모"></textarea></div></li>';
+    });
+    sec.innerHTML=head+ul+'</ul>';
+    host.appendChild(sec);
+  });
+
+  function autosize(ta){ ta.style.height='auto'; ta.style.height=Math.max(34,ta.scrollHeight)+'px'; }
+
+  function paint(){
+    var done=0;
+    var per={};
+    [].forEach.call(document.querySelectorAll('.task'),function(li){
+      var id=li.dataset.id, p=li.dataset.p, on=!!state.done[id];
+      li.classList.toggle('done',on);
+      li.querySelector('input[type=checkbox]').checked=on;
+      per[p]=per[p]||[0,0]; per[p][1]++; if(on){ per[p][0]++; done++; }
+    });
+    Object.keys(per).forEach(function(p){
+      var e=document.getElementById('pc'+p);
+      if(e) e.textContent=per[p][0]+' / '+per[p][1];
+    });
+    document.getElementById('cnt').innerHTML=done+' <span>/ '+total+' 완료</span>';
+    document.getElementById('fill').style.width=(total?done/total*100:0)+'%';
+  }
+
+  [].forEach.call(document.querySelectorAll('input[type=checkbox]'),function(el){
+    el.addEventListener('change',function(){ state.done[el.dataset.id]=el.checked; paint(); save(); });
+  });
+  [].forEach.call(document.querySelectorAll('textarea.memo'),function(ta){
+    var id=ta.dataset.id;
+    if(state.memo[id]) ta.value=state.memo[id];
+    autosize(ta);
+    ta.addEventListener('input',function(){ state.memo[id]=ta.value; autosize(ta); save(); });
+  });
+  paint();
+
+  document.getElementById('btnCopy').addEventListener('click',function(){
+    var out=['법인 설립 To-Do · '+new Date().toLocaleDateString('ko-KR'),''];
+    DATA.forEach(function(ph,pi){
+      out.push('['+ph.p+'] '+ph.w);
+      ph.t.forEach(function(t,ti){
+        var id='t'+pi+'_'+ti;
+        var m=state.memo[id]||'';
+        out.push('  '+(state.done[id]?'[v]':'[ ]')+' '+t[0]+(m?'  / '+m:''));
+      });
+      out.push('');
+    });
+    var txt=out.join('\n');
+    function ok(){ flash('복사했습니다'); }
+    function fb(){ var e=document.createElement('textarea'); e.value=txt; e.style.position='fixed'; e.style.opacity='0';
+      document.body.appendChild(e); e.select();
+      try{ document.execCommand('copy'); ok(); }catch(x){ flash('복사에 실패했습니다'); }
+      document.body.removeChild(e); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(ok,fb); } else fb();
+  });
+
+  document.getElementById('btnReset').addEventListener('click',function(){
+    if(!confirm('체크와 메모를 모두 지웁니다. 계속할까요?')) return;
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  });
+})();
+</script>
+</body>
+</html>
